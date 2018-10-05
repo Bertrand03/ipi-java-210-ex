@@ -1,17 +1,55 @@
 package com.ipiecoles.java.java210;
 
+import java.util.Scanner;
+
 public class Sudoku {
+	public static final String FIN_SAISIE = "FIN";
+	public static boolean resolu = false;
+	short sudokuAResoudre[][];
+
+	public short[][] getSudokuAResoudre() {
+		return sudokuAResoudre;
+	}
+
+	public void setSudokuAResoudre(short[][] tab) {
+		sudokuAResoudre = tab;
+	}
+
 
 	/**
 	 * Constructeur par défaut
 	 */
+
+
 	public Sudoku() {
+		sudokuAResoudre = new short[9][9];
+		// ou setSudokuAResoudre = (new short [9][9])
 	}
 
 	public static boolean ligneSaisieEstCoherente(String ligneSaisie) {
-		return true;
+		//Ligne nulle ou vide
+
+		if (ligneSaisie == null || ligneSaisie.trim().equals("")) {
+			System.out.println("Les coordonnées du chiffre et/ou sa valeur ne peuvent pas être nulles, vides ou remplies avec des espaces");
+			return false;   // Le return sort de la fonction (code mort)
+		}
+		// La ligne ne faisant pas trois caractères
+		else if
+				(ligneSaisie.length() != 3) {
+			System.out.println("Les coordonnées du chiffre et/ou sa valeur doit faire 3 caractères");
+			return false;
+		} else if (!ligneSaisie.matches("[0-8][0-8][1-9]"))
+		{
+			System.out.println("L'abscisse et l'ordonnée doivent être compris entre 0 et 8, la valeur entre 1 et 9");
+
+			return false;
+		}
+			return true;
 	}
-	
+
+
+
+
 	/**
 	 * Cette méthode invite l'utilisateur à saisir un ensemble de coordonnées pour initialiser un sudoku à résoudre.
 	 * Les coordonnées prennent la forme XYZ avec X correspondant à l'abscisse, Y l'ordonnée et Z la valeur. Seules les
@@ -26,8 +64,33 @@ public class Sudoku {
 	 * @return Un tableau comportant les coordonnées des chiffres présents dans le sudoku à résoudre
 	 */
 	public static String[] demandeCoordonneesSudoku() {
-		return null;
+		// initialiser un tableau
+		String[] tableauCoordonnees = new String[81];
+
+		Scanner scanner = new Scanner(System.in);
+		String ligneSaisie = scanner.nextLine();
+
+		int i = 0;
+
+		while (!ligneSaisie.equals("FIN")) {
+			//Tester si la ligne est cohérente
+			if (ligneSaisieEstCoherente(ligneSaisie)) { //Il va comparer la saisie utilisateur avec la fonction ligneSaisieEstCoherente
+				//Si oui, je l'ajoute dans mon tableau.
+				tableauCoordonnees[i] = ligneSaisie; //ligneSaisie prend la place de la coordonnée i du tableau
+				i++; //Incrementation qui permet de changer de coordonnée dans le tableau. Si ligneSaisie, on passera
+				//à une autre coordonnée du tableau qui aura la nouvelle valeur ligneSaisie
+			} else {
+				// Si non, je l'informe de son erreur et lui redemande de saisir de nouvelles coordonnées
+				System.out.println("Les coordonnées du chiffre et/ou sa valeur ne sont pas cohérents. Merci de réessayer");
+			}
+			ligneSaisie = scanner.nextLine();
+		}
+		scanner.close();
+		return tableauCoordonnees;
 	}
+
+
+
 	
 	/**
 	 * La méthode prend un tableau de coordonnées de chiffre soud la forme XYZ avec X correspondant 
