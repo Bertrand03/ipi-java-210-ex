@@ -54,7 +54,7 @@ public class Sudoku {
 
 	/**
 	 * Cette méthode invite l'utilisateur à saisir un ensemble de coordonnées pour initialiser un sudoku à résoudre.
-	 * Les coordonnées prennent la forme XYZ avec X correspondant à l'abscisse, Y l'ordonnée et Z la valeur. Seules les
+	 * Les coordonnées prennent la forme XYZ avec X correspondant à l'ligne, Y l'ordonnée et Z la valeur. Seules les
 	 * chiffres présents sont à saisir et l'utilisateur doit appuyer sur entrée après chaque saisie. 
 	 * Lorsqu'il a terminé sa saisie, il entre la chaîne FIN. La fonction remplit au fur et à mesure un tableau de String
 	 * comportant les coordonnées des chiffres saisis.
@@ -67,7 +67,7 @@ public class Sudoku {
 	 */
 	public static String[] demandeCoordonneesSudoku() {
 		// initialiser un tableau
-		String[] tableauCoordonnees = new String[81];
+		String[] tableauCocolonnes = new String[81];
 
 		Scanner scanner = new Scanner(System.in);
 		String ligneSaisie = scanner.nextLine();
@@ -78,7 +78,7 @@ public class Sudoku {
 			//Tester si la ligne est cohérente
 			if (ligneSaisieEstCoherente(ligneSaisie)) { //Il va comparer la saisie utilisateur avec la fonction ligneSaisieEstCoherente
 				//Si oui, je l'ajoute dans mon tableau.
-				tableauCoordonnees[i] = ligneSaisie; //ligneSaisie prend la place de la coordonnée i du tableau
+				tableauCocolonnes[i] = ligneSaisie; //ligneSaisie prend la place de la coordonnée i du tableau
 				i++; //Incrementation qui permet de changer de coordonnée dans le tableau. Si ligneSaisie, on passera
 				//à une autre coordonnée du tableau qui aura la nouvelle valeur ligneSaisie
 			} else {
@@ -88,7 +88,7 @@ public class Sudoku {
 			ligneSaisie = scanner.nextLine();
 		}
 		scanner.close();
-		return tableauCoordonnees;
+		return tableauCocolonnes;
 	}
 
 
@@ -96,25 +96,25 @@ public class Sudoku {
 	
 	/**
 	 * La méthode prend un tableau de coordonnées de chiffre soud la forme XYZ avec X correspondant 
-	 * à l'abscisse, Y l'ordonnée et Z la valeur et remplit le tableau sudokuAResoudre avec les bonnes valeurs
+	 * à l'ligne, Y l'ordonnée et Z la valeur et remplit le tableau sudokuAResoudre avec les bonnes valeurs
 	 * au bon endroit. Ex 012, première ligne deuxième colonne, on met la valeur 2. Lorsqu'une valeur nulle est 
 	 * rencontrée dans le tableau, on arrête le traitement
 	 * 
 	 * Pour passer d'une String à un short, on pourra utiliser la méthode stringToInt(string)
 	 * 
-	 * @param tableauCoordonnees
+	 * @param tableauCocolonnes
 	 */
-	public void remplitSudokuATrous(String[] tableauCoordonnees) {
+	public void remplitSudokuATrous(String[] tableauCocolonnes) {
 		int ligne = 0;
 		short colonne = 0;
 		short valeur = 1;
 		//Définir, ligne, colonne et valeur
 		int i = 0;
-		while (i < tableauCoordonnees.length && tableauCoordonnees[i] != null) {
+		while (i < tableauCocolonnes.length && tableauCocolonnes[i] != null) {
 
-			ligne = Short.parseShort(tableauCoordonnees[i].substring(0, 1)); // Passe du String à un short
-			colonne = (short) Integer.parseInt(tableauCoordonnees[i].substring(1, 2));// (short) Integer.parseInt va convertir un short en Int
-			valeur = Short.parseShort(tableauCoordonnees[i].substring(2, 3));
+			ligne = Short.parseShort(tableauCocolonnes[i].substring(0, 1)); // Passe du String à un short
+			colonne = (short) Integer.parseInt(tableauCocolonnes[i].substring(1, 2));// (short) Integer.parseInt va convertir un short en Int
+			valeur = Short.parseShort(tableauCocolonnes[i].substring(2, 3));
 
 			sudokuAResoudre[ligne][colonne] = valeur; //Ici on integre la valeur dans le tableau sudokuAResoudre
 
@@ -123,14 +123,14 @@ public class Sudoku {
 	}
 		// 2eme solution avec for
 
-		/*for (int n = 0; n < tableauCoordonnees.length; n++;){
-			if (tableauCoordonnees != null) {
+		/*for (int n = 0; n < tableauCocolonnes.length; n++;){
+			if (tableauCocolonnes != null) {
 				break;
 			}
 		}
-		ligne = Short.parseShort (tableauCoordonnees [i].substring(0,1); // Passe du String à un short
-		colonne = (short) Integer.parseInt(tableauCoordonnees[i].substring(1,2));// (short) Integer.parseInt va convertir un short en Int
-		valeur = Short.parseShort(tableauCoordonnees[i].substring(2, 3);
+		ligne = Short.parseShort (tableauCocolonnes [i].substring(0,1); // Passe du String à un short
+		colonne = (short) Integer.parseInt(tableauCocolonnes[i].substring(1,2));// (short) Integer.parseInt va convertir un short en Int
+		valeur = Short.parseShort(tableauCocolonnes[i].substring(2, 3);
 
 		sudokuAResoudre [ligne] [colonne] = valeur //Ici on integre la valeur dans le tableau sudokuAResoudre
 	}
@@ -210,7 +210,7 @@ public class Sudoku {
 		}
 	
 	/**
-	 * Cette méthode vérifie si un chiffre est autorisé à la position d'abscisse et
+	 * Cette méthode vérifie si un chiffre est autorisé à la position d'ligne et
 	 * d'ordonnée donnés dans le sudoku en appliquant les règles suivantes : 
 	 * 
 	 * 1 : Si la valeur est déjà dans la ligne, le chiffre n'est pas autorisé
@@ -224,11 +224,41 @@ public class Sudoku {
 	 * @return
 	 */
 	public static boolean estAutorise(int ligne, int colonne, short chiffre, short[][] sudoku) {
-		//Si le chiffre est déjà dans la ligne, le chiffre n'est pas autorisé.
-		return true;
-    }
 
-	public boolean resoudre(int abscisse, int ordonnee, short[][] sudoku) {
+		//Si la valeur est déjà dans la ligne, le chiffre n'est pas autorisé
+		for (int j = 0; j < sudoku[ligne].length; j++) {
+			if (chiffre == sudoku[ligne][j]) {
+				return false;
+			}
+		}
+
+		//Si la valeur est déjà dans la colonne, le chiffre n'est pas autorisé
+		for (int i = 0; i < sudoku.length; i++) {
+			if (chiffre == sudoku[i][colonne]) {
+				return false;
+			}
+		}
+
+		//Si la valeur est déjà dans la boîte le chiffre n'est pas autorisé
+		//Commencer par écrire l'algo comme si on était sur la première boîte en haut à gauche
+
+		int debutI = (ligne /3) * 3; //0-2 => 0 / 3-5 => 3 / 6-8 => 6
+		int debutJ= (colonne /3) * 3;
+
+
+		for (int i = debutI; i < debutI + 3; i++) {
+			for (int j = debutJ; j <= debutJ + 3; j++) {
+				if (sudoku[i][j] == chiffre) {
+					return false;
+				}
+			}
+		}
+
+		//Si tout est ok, on renvoie vrai
+		return true;
+	}
+
+	public boolean resoudre(int ligne, int colonne, short[][] sudoku) {
 		return true;
     }
 }
