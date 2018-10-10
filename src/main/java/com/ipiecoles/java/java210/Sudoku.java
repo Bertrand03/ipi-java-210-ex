@@ -1,5 +1,7 @@
 package com.ipiecoles.java.java210;
 
+import com.sun.org.apache.xml.internal.utils.StringToIntTable;
+
 import java.util.Scanner;
 
 public class Sudoku {
@@ -103,37 +105,109 @@ public class Sudoku {
 	 * @param tableauCoordonnees
 	 */
 	public void remplitSudokuATrous(String[] tableauCoordonnees) {
+		int ligne = 0;
+		short colonne = 0;
+		short valeur = 1;
+		//Définir, ligne, colonne et valeur
+		int i = 0;
+		while (i < tableauCoordonnees.length && tableauCoordonnees[i] != null) {
+
+			ligne = Short.parseShort(tableauCoordonnees[i].substring(0, 1)); // Passe du String à un short
+			colonne = (short) Integer.parseInt(tableauCoordonnees[i].substring(1, 2));// (short) Integer.parseInt va convertir un short en Int
+			valeur = Short.parseShort(tableauCoordonnees[i].substring(2, 3));
+
+			sudokuAResoudre[ligne][colonne] = valeur; //Ici on integre la valeur dans le tableau sudokuAResoudre
+
+			i++;
+		}
+	}
+		// 2eme solution avec for
+
+		/*for (int n = 0; n < tableauCoordonnees.length; n++;){
+			if (tableauCoordonnees != null) {
+				break;
+			}
+		}
+		ligne = Short.parseShort (tableauCoordonnees [i].substring(0,1); // Passe du String à un short
+		colonne = (short) Integer.parseInt(tableauCoordonnees[i].substring(1,2));// (short) Integer.parseInt va convertir un short en Int
+		valeur = Short.parseShort(tableauCoordonnees[i].substring(2, 3);
+
+		sudokuAResoudre [ligne] [colonne] = valeur //Ici on integre la valeur dans le tableau sudokuAResoudre
+	}
+*/
+
+
+		/*stringToInt(ligne, colonne);
+		Short.parseShort(valeur);
+		//Parcourir le tableau tableauCoordonnées
+			ligneSaisie.substring(0);
+			ligneSaisie.substring(1);
+
+		//Pour chacune de ces valeurs
+		//=> extrait ligne, colonne et valeur
+
+		//on met la valeur au bon endroit dans sudokuAResoudre
+		sudokuAResoudre[ligne][colonne] = valeur
 		
-    }
+
 	
 	private int stringToInt(String s) {
 		return Integer.parseInt(s);
-	}
-	
-	/**
-	 * Cette méthode affiche un sudoku de manière formatée sur la console.
-	 * Cela doit ressembler exactement à :
-	 * -----------------------
-	 * |   8   | 4   2 |   6   |
-	 * |   3 4 |       | 9 1   |
-	 * | 9 6   |       |   8 4 |
-	 *  -----------------------
-	 * |       | 2 1 6 |       |
-	 * |       |       |       |
-	 * |       | 3 5 7 |       |
-	 *  -----------------------
-	 * | 8 4   |       |   7 5 |
-	 * |   2 6 |       | 1 3   |
-	 * |   9   | 7   1 |   4   |
-	 *  -----------------------
-	 * 
-	 * @param sudoku tableau de short représentant les valeurs d'un sudoku (résolu ou non). 
-	 * Ce tableau fait 9 par 9 et contient des chiffres de 0 à 9, 0 correspondant à une valeur 
-	 * non trouvée (dans ce cas, le programme affiche un blanc à la place de 0
-	 */
+	}*/
+
+		/**
+		 * Cette méthode affiche un sudoku de manière formatée sur la console.
+		 * Cela doit ressembler exactement à :
+		 * -----------------------
+		 * |   8   | 4   2 |   6   |
+		 * |   3 4 |       | 9 1   |
+		 * | 9 6   |       |   8 4 |
+		 *  -----------------------
+		 * |       | 2 1 6 |       |
+		 * |       |       |       |
+		 * |       | 3 5 7 |       |
+		 *  -----------------------
+		 * | 8 4   |       |   7 5 |
+		 * |   2 6 |       | 1 3   |
+		 * |   9   | 7   1 |   4   |
+		 *  -----------------------
+		 *
+		 * @param sudoku tableau de short représentant les valeurs d'un sudoku (résolu ou non).
+		 * Ce tableau fait 9 par 9 et contient des chiffres de 0 à 9, 0 correspondant à une valeur
+		 * non trouvée (dans ce cas, le programme affiche un blanc à la place de 0
+		 */
+
 	public void ecrireSudoku(short[][] sudoku) {
-		
-    }
+
+		for (int i = 0; i < sudoku.length; i++)
+		{
+			//------------=> i = 0/3/6/9, nous servira à mettre les lignes horizontales
+			if(i % 3 == 0) { //Si Modulo de trois est égale à O on affiche (O/3, 3/3 etc...)
+				System.out.println(" -----------------------");
+							}
+				for (int j = 0; j < sudoku[i].length; j++)
+				{
+					// j 0 / 3 / 6 / 9
+					if (j %3 ==0)
+					{
+						System.out.print("| ");
+					}
+					if(sudoku[i][j] == 0)
+					{
+						System.out.print("  ");
+					}
+					else
+					{
+					//Affiche chaque element de mon tableau à double dimensions
+				System.out.print(sudoku[i][j] + " ");
+					}
+				}
+		// j = 9eme
+		System.out.println("|");
+		}
+		System.out.println(" -----------------------");
+
+		}
 	
 	/**
 	 * Cette méthode vérifie si un chiffre est autorisé à la position d'abscisse et
@@ -143,13 +217,14 @@ public class Sudoku {
 	 * 2 : Si le valeur est déjà dans la colone, le chiffre n'est pas autorisé
 	 * 3 : Si la valeur est est déjà dans la boite, le chiffre n'est pas autorisé
 	 * 
-	 * @param abscisse
-	 * @param ordonnee
+	 * @param ligne
+	 * @param colonne
 	 * @param chiffre
 	 * @param sudoku
 	 * @return
 	 */
-	public static boolean estAutorise(int abscisse, int ordonnee, short chiffre, short[][] sudoku) {
+	public static boolean estAutorise(int ligne, int colonne, short chiffre, short[][] sudoku) {
+		//Si le chiffre est déjà dans la ligne, le chiffre n'est pas autorisé.
 		return true;
     }
 
